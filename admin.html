@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Панель Адміністратора | TicketGo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">TicketGo ADMIN</div>
+        <!-- Додано id="main-nav", щоб script.js міг сюди вставити меню -->
+        <nav id="main-nav"></nav>
+    </header>
+
+    <main style="padding: 40px; max-width: 1000px; margin: 0 auto;">
+        <h1>Управління користувачами</h1>
+        <p>Список усіх зареєстрованих користувачів у системі.</p>
+        
+        <!-- Прибрали border="1" і додали клас для стилізації через CSS -->
+        <table class="admin-table" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+            <thead>
+                <tr style="background: #f1f5f9; text-align: left;">
+                    <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Ім'я</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Email</th>
+                    <th style="padding: 12px; border-bottom: 2px solid #cbd5e1;">Роль</th>
+                </tr>
+            </thead>
+            <tbody id="user-list">
+                <!-- Сюди JS вставить рядки -->
+            </tbody>
+        </table>
+    </main>
+
+    <script src="js/script.js"></script>
+    <script>
+        // Перевіряємо доступ відразу після завантаження
+        if (typeof window.checkAdminAccess === "function") {
+            window.checkAdminAccess();
+        }
+
+        function showUsers() {
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const list = document.getElementById('user-list');
+            
+            if (users.length === 0) {
+                list.innerHTML = '<tr><td colspan="3" style="padding: 20px; text-align: center;">Користувачів ще немає</td></tr>';
+                return;
+            }
+
+            list.innerHTML = users.map(user => `
+                <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 12px;">${user.username}</td>
+                    <td style="padding: 12px;">${user.email}</td>
+                    <td style="padding: 12px;">
+                        <span style="background: ${user.role === 'admin' ? '#dcfce7' : '#f1f5f9'}; 
+                                     color: ${user.role === 'admin' ? '#166534' : '#475569'}; 
+                                     padding: 4px 8px; border-radius: 4px; font-size: 14px;">
+                            ${user.role || 'user'}
+                        </span>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        // Чекаємо, поки завантажиться DOM, щоб вставити дані
+        document.addEventListener('DOMContentLoaded', showUsers);
+    </script>
+</body>
+</html>

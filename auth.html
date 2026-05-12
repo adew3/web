@@ -7,38 +7,35 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-    <div class="auth-container" style="max-width: 400px; margin: 50px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-        
-        <!-- Форма реєстрації -->
-        <section id="signup-section">
-            <h2>Реєстрація</h2>
-            <form id="signup-form">
-                <div style="margin-bottom: 15px;">
-                    <label for="reg-name">Ім'я:</label><br>
-                    <input type="text" id="reg-name" name="username" required style="width: 100%; padding: 8px;">
-                </div>
-                <div style="margin-bottom: 15px;">
-                    <label for="reg-email">Email:</label><br>
-                    <input type="email" id="reg-email" name="email" required style="width: 100%; padding: 8px;">
-                </div>
-                <button type="submit" class="search-box button" style="width: 100%;">Створити акаунт</button>
-            </form>
-            <p>Вже маєте акаунт? <a href="#" onclick="toggleAuth()">Увійти</a></p>
-        </section>
+    <div class="auth-container">
+    <section id="signup-section">
+        <h2>Створити акаунт</h2>
+        <form id="signup-form">
+            <div class="auth-form-group">
+                <label for="reg-name">Повне ім'я</label>
+                <input type="text" id="reg-name" name="username" class="auth-input" placeholder="Іван Іванов" required>
+            </div>
+            <div class="auth-form-group">
+                <label for="reg-email">Електронна пошта</label>
+                <input type="email" id="reg-email" name="email" class="auth-input" placeholder="example@mail.com" required>
+            </div>
+            <button type="submit" class="auth-btn">Зареєструватися</button>
+        </form>
+        <p style="margin-top: 20px;">Вже маєте акаунт? <a href="#" onclick="toggleAuth()">Увійти</a></p>
+    </section>
 
-        <!-- Форма входу (прихована за замовчуванням) -->
-        <section id="signin-section" style="display: none;">
-            <h2>Вхід</h2>
-            <form id="signin-form">
-                <div style="margin-bottom: 15px;">
-                    <label for="login-email">Email:</label><br>
-                    <input type="email" id="login-email" name="email" required style="width: 100%; padding: 8px;">
-                </div>
-                <button type="submit" class="search-box button" style="width: 100%;">Увійти</button>
-            </form>
-            <p>Немає акаунту? <a href="#" onclick="toggleAuth()">Зареєструватися</a></p>
-        </section>
-    </div>
+    <section id="signin-section" style="display: none;">
+        <h2>Вхід у систему</h2>
+        <form id="signin-form">
+            <div class="auth-form-group">
+                <label for="login-email">Електронна пошта</label>
+                <input type="email" id="login-email" name="email" class="auth-input" placeholder="example@mail.com" required>
+            </div>
+            <button type="submit" class="auth-btn">Увійти</button>
+        </form>
+        <p style="margin-top: 20px;">Немає акаунту? <a href="#" onclick="toggleAuth()">Створити зараз</a></p>
+    </section>
+</div>
 
     <script src="js/auth.js"></script>
 </body>

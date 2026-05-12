@@ -33,7 +33,7 @@ function updateNavigation() {
         nav.innerHTML = `
             <a href="index.html">Головна</a>
             <a href="tickets.html">Квитки</a>
-            <a href="#">Мої бронювання</a>
+            <a href="bookings.html">Мої бронювання</a>
             <span style="margin-left: 25px; font-weight: bold; color: #3b82f6;">Привіт, ${session.username}!</span>
             <a href="#" id="sign-out-btn" style="color: #ef4444;">Вийти</a>
         `;

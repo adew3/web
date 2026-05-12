@@ -9,30 +9,22 @@
 
 <header class="header">
     <div class="logo">TicketGo</div>
-
-    <nav>
-        <a href="index.html">Головна</a>
-        <a href="tickets.html">Квитки</a>
-        <a href="#">Мої бронювання</a>
-        <a href="#">Профіль</a>
-    </nav>
+    <nav id="main-nav"></nav>
 </header>
 
 <section class="tickets-page">
     <h1>Доступні квитки</h1>
 
-    <div class="ticket-list">
-
+    <div class="ticket-list" id="ticket-container">
         <div class="ticket-card">
             <div class="ticket-info">
                 <h3>Київ → Львів</h3>
                 <p>Дата: 11.05.2026</p>
                 <p>Час: 14:30</p>
             </div>
-
             <div class="ticket-price">
                 <h2>850 ₴</h2>
-                <button>Забронювати</button>
+                <button class="book-btn" data-route="Київ — Львів">Забронювати</button>
             </div>
         </div>
 
@@ -42,10 +34,9 @@
                 <p>Дата: 15.05.2026</p>
                 <p>Час: 09:15</p>
             </div>
-
             <div class="ticket-price">
                 <h2>2200 ₴</h2>
-                <button>Забронювати</button>
+                <button class="book-btn" data-route="Одеса — Варшава">Забронювати</button>
             </div>
         </div>
 
@@ -55,15 +46,15 @@
                 <p>Дата: 18.05.2026</p>
                 <p>Час: 18:45</p>
             </div>
-
             <div class="ticket-price">
                 <h2>3100 ₴</h2>
-                <button>Забронювати</button>
+                <button class="book-btn" data-route="Харків — Прага">Забронювати</button>
             </div>
         </div>
-
     </div>
 </section>
 
+<script src="js/script.js"></script>
+<script src="js/tickets.js"></script> 
 </body>
 </html>

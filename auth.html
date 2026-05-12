@@ -1,0 +1,45 @@
+<!-- auth.html -->
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Авторизація | TicketGo</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container" style="max-width: 400px; margin: 50px auto; padding: 20px; background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+        
+        <!-- Форма реєстрації -->
+        <section id="signup-section">
+            <h2>Реєстрація</h2>
+            <form id="signup-form">
+                <div style="margin-bottom: 15px;">
+                    <label for="reg-name">Ім'я:</label><br>
+                    <input type="text" id="reg-name" name="username" required style="width: 100%; padding: 8px;">
+                </div>
+                <div style="margin-bottom: 15px;">
+                    <label for="reg-email">Email:</label><br>
+                    <input type="email" id="reg-email" name="email" required style="width: 100%; padding: 8px;">
+                </div>
+                <button type="submit" class="search-box button" style="width: 100%;">Створити акаунт</button>
+            </form>
+            <p>Вже маєте акаунт? <a href="#" onclick="toggleAuth()">Увійти</a></p>
+        </section>
+
+        <!-- Форма входу (прихована за замовчуванням) -->
+        <section id="signin-section" style="display: none;">
+            <h2>Вхід</h2>
+            <form id="signin-form">
+                <div style="margin-bottom: 15px;">
+                    <label for="login-email">Email:</label><br>
+                    <input type="email" id="login-email" name="email" required style="width: 100%; padding: 8px;">
+                </div>
+                <button type="submit" class="search-box button" style="width: 100%;">Увійти</button>
+            </form>
+            <p>Немає акаунту? <a href="#" onclick="toggleAuth()">Зареєструватися</a></p>
+        </section>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>

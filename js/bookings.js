@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
             card.innerHTML = `
                 <div class="ticket-info">
                     <h3>${ticket.route}</h3>
-                    <p>${ticket.date}</p>
-                    <p>${ticket.time}</p>
+                    <p>📅 Дата: ${ticket.date}</p>
+                    <p>⏰ Час: ${ticket.time}</p>
                 </div>
                 <div class="ticket-price">
                     <h2>${ticket.price}</h2>
-                    <button class="cancel-btn" onclick="cancelBooking(${ticket.id})" style="background: #ef4444;">Скасувати</button>
+                    <button class="cancel-btn" onclick="cancelBooking('${ticket.id}')" style="background: #ef4444; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: 600;">Скасувати</button>
                 </div>
             `;
             container.appendChild(card);
@@ -35,8 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Функція видалення бронювання
 function cancelBooking(id) {
+    const bookingId = parseInt(id);
     let allBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
-    allBookings = allBookings.filter(b => b.id !== id);
+    allBookings = allBookings.filter(b => b.id !== bookingId);
     localStorage.setItem('bookings', JSON.stringify(allBookings));
-    window.location.reload(); // Оновлюємо сторінку, щоб видалити картку
+    window.location.reload();
 }

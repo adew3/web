@@ -55,7 +55,8 @@ function updateNavigation() {
 document.getElementById('home-search-btn')?.addEventListener('click', () => {
     const fromVal = document.getElementById('home-from')?.value.trim();
     const toVal = document.getElementById('home-to')?.value.trim();
-    const dateVal = document.querySelector('.search-box input[type="date"]')?.value;
+    const dateInputs = document.querySelectorAll('.search-box input[type="date"]');
+    const dateVal = dateInputs.length > 0 ? dateInputs[0].value : null;
 
     if (toVal || fromVal) localStorage.setItem('pendingSearch', toVal || fromVal);
     if (dateVal) localStorage.setItem('pendingDate', dateVal);

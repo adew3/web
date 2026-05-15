@@ -16,9 +16,18 @@ body {
 }
 
 .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-weight: bold;
     font-size: 22px;
     color: #3b82f6;
+    text-decoration: none;
+}
+
+.logo-img {
+    height: 40px;
+    width: auto;
 }
 
 .header a {
@@ -307,4 +316,66 @@ body {
 
 .auth-container a:hover {
     text-decoration: underline;
+}
+/* Адмін-панель */
+.admin-page {
+    padding: 50px 40px 80px;
+}
+
+.admin-panel {
+    display: grid;
+    grid-template-columns: 1.2fr 1.8fr;
+    gap: 30px;
+    align-items: start;
+}
+
+.admin-form-card,
+.admin-table-card {
+    background: white;
+    border-radius: 18px;
+    padding: 30px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.admin-form-card h2,
+.admin-table-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.admin-route-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+    background: #f8fafc;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.03);
+}
+
+.admin-route-card p {
+    margin: 8px 0 0;
+    color: #475569;
+}
+
+.delete-route-btn {
+    background: #ef4444;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.delete-route-btn:hover {
+    opacity: 0.95;
+}
+
+@media (max-width: 960px) {
+    .admin-panel {
+        grid-template-columns: 1fr;
+    }
 }

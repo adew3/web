@@ -1,12 +1,8 @@
-// 1. Дані
-const initialTickets = [
-    { id: 1, from: "Київ", to: "Львів", date: "11.05.2026", time: "14:30", price: 850, transport: "train" },
-    { id: 2, from: "Одеса", to: "Варшава", date: "15.05.2026", time: "09:15", price: 2200, transport: "bus" },
-    { id: 3, from: "Харків", to: "Прага", date: "18.05.2026", time: "18:45", price: 3100, transport: "plane" },
-    { id: 4, from: "Дніпро", to: "Київ", date: "12.05.2026", time: "22:00", price: 450, transport: "bus" }
-];
+function getTicketById(ticketId) {
+    const tickets = TicketGo.getAvailableRoutes();
+    return tickets.find(t => t.id === ticketId);
+}
 
-// 2. Стан фільтрів
 const queryState = {
     search: '',
     date: '',
@@ -14,9 +10,8 @@ const queryState = {
     type: 'all'
 };
 
-// 3. Функція бронювання (Глобальна)
 window.handleBooking = function(ticketId, buttonElement) {
-    const session = JSON.parse(localStorage.getItem('session'));
+    const session = TicketGo.getSession();
 
     if (!session) {
         alert('Будь ласка, увійдіть у систему!');
@@ -24,9 +19,12 @@ window.handleBooking = function(ticketId, buttonElement) {
         return;
     }
 
-    const ticket = initialTickets.find(t => t.id === ticketId);
-    const allBookings = JSON.parse(localStorage.getItem('bookings') || '[]');
+    const ticket = getTicketById(ticketId);
+    if (!ticket) {
+        return alert('Цей маршрут більше недоступний.');
+    }
 
+    const allBookings = TicketGo.getBookings();
     const newBooking = {
         userEmail: session.email,
         id: Date.now(),
@@ -37,15 +35,13 @@ window.handleBooking = function(ticketId, buttonElement) {
     };
 
     allBookings.push(newBooking);
-    localStorage.setItem('bookings', JSON.stringify(allBookings));
+    TicketGo.saveBookings(allBookings);
 
-    // Візуальне підтвердження
     buttonElement.innerText = 'Заброньовано ✓';
     buttonElement.style.background = '#10b981';
     buttonElement.disabled = true;
 };
 
-// 4. Рендер карток
 function renderTickets(tickets) {
     const container = document.getElementById('ticket-container');
     if (!container) return;
@@ -77,9 +73,8 @@ function renderTickets(tickets) {
     });
 }
 
-// 5. Логіка фільтрації
 function applyFilters() {
-    let result = [...initialTickets];
+    let result = TicketGo.getAvailableRoutes();
 
     if (queryState.search) {
         const s = queryState.search.toLowerCase();
@@ -87,7 +82,7 @@ function applyFilters() {
     }
 
     if (queryState.date) {
-        result = result.filter(t => t.date.split('.').reverse().join('-') === queryState.date);
+        result = result.filter(t => t.date === queryState.date);
     }
 
     if (queryState.type !== 'all') {
@@ -97,38 +92,59 @@ function applyFilters() {
     result.sort((a, b) => {
         if (queryState.sort === 'price-asc') return a.price - b.price;
         if (queryState.sort === 'price-desc') return b.price - a.price;
+        if (queryState.sort === 'date-asc') return a.date.localeCompare(b.date);
         return 0;
     });
 
     renderTickets(result);
 }
 
-// 6. Слухачі подій
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     const dateInput = document.getElementById('date-filter');
     const typeFilter = document.getElementById('type-filter');
     const sortSelect = document.getElementById('sort-select');
 
-    // Підхоплення даних з головної
     const pSearch = localStorage.getItem('pendingSearch');
     const pDate = localStorage.getItem('pendingDate');
 
-    if (pSearch) { queryState.search = pSearch; if (searchInput) searchInput.value = pSearch; localStorage.removeItem('pendingSearch'); }
-    if (pDate) { queryState.date = pDate; if (dateInput) dateInput.value = pDate; localStorage.removeItem('pendingDate'); }
+    if (pSearch) {
+        queryState.search = pSearch;
+        if (searchInput) searchInput.value = pSearch;
+        localStorage.removeItem('pendingSearch');
+    }
+    if (pDate) {
+        queryState.date = pDate;
+        if (dateInput) dateInput.value = pDate;
+        localStorage.removeItem('pendingDate');
+    }
 
-    searchInput?.addEventListener('input', e => { queryState.search = e.target.value; applyFilters(); });
-    dateInput?.addEventListener('change', e => { queryState.date = e.target.value; applyFilters(); });
-    typeFilter?.addEventListener('change', e => { queryState.type = e.target.value; applyFilters(); });
-    sortSelect?.addEventListener('change', e => { queryState.sort = e.target.value; applyFilters(); });
+    searchInput?.addEventListener('input', e => {
+        queryState.search = e.target.value;
+        applyFilters();
+    });
+    dateInput?.addEventListener('change', e => {
+        queryState.date = e.target.value;
+        applyFilters();
+    });
+    typeFilter?.addEventListener('change', e => {
+        queryState.type = e.target.value;
+        applyFilters();
+    });
+    sortSelect?.addEventListener('change', e => {
+        queryState.sort = e.target.value;
+        applyFilters();
+    });
 
     applyFilters();
 });
 
 window.resetFilters = () => {
-    queryState.search = ''; queryState.date = ''; queryState.type = 'all';
-    if(document.getElementById('search-input')) document.getElementById('search-input').value = '';
-    if(document.getElementById('date-filter')) document.getElementById('date-filter').value = '';
-    if(document.getElementById('type-filter')) document.getElementById('type-filter').value = 'all';
+    queryState.search = '';
+    queryState.date = '';
+    queryState.type = 'all';
+    if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
+    if (document.getElementById('date-filter')) document.getElementById('date-filter').value = '';
+    if (document.getElementById('type-filter')) document.getElementById('type-filter').value = 'all';
     applyFilters();
 };

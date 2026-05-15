@@ -16,18 +16,9 @@ body {
 }
 
 .logo {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
     font-weight: bold;
     font-size: 22px;
     color: #3b82f6;
-    text-decoration: none;
-}
-
-.logo-img {
-    height: 40px;
-    width: auto;
 }
 
 .header a {
@@ -317,9 +308,17 @@ body {
 .auth-container a:hover {
     text-decoration: underline;
 }
+
 /* Адмін-панель */
 .admin-page {
     padding: 50px 40px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-page h1 {
+    text-align: center;
+    margin-bottom: 40px;
 }
 
 .admin-panel {
@@ -341,6 +340,11 @@ body {
 .admin-table-card h2 {
     margin-top: 0;
     margin-bottom: 20px;
+}
+
+.admin-form-card .auth-form-group,
+.admin-table-card .auth-form-group {
+    margin-bottom: 18px;
 }
 
 .admin-route-card {
@@ -375,6 +379,10 @@ body {
 }
 
 @media (max-width: 960px) {
+    .admin-page {
+        padding: 30px 20px 60px;
+    }
+
     .admin-panel {
         grid-template-columns: 1fr;
     }

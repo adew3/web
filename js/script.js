@@ -1,14 +1,23 @@
 // Популярні напрямки
-const popularDestinations = [
-    { from: "Київ", to: "Львів", price: "500 ₴" },
-    { from: "Київ", to: "Одеса", price: "600 ₴" },
-    { from: "Львів", to: "Варшава", price: "1200 ₴" },
-    { from: "Дніпро", to: "Київ", price: "450 ₴" }
-];
+function renderPopularCards() {
+    const popularSources = (typeof TicketGo !== 'undefined' && typeof TicketGo.getPopularDestinations === 'function')
+        ? TicketGo.getPopularDestinations()
+        : [
+            { from: "Київ", to: "Львів", price: "500 ₴" },
+            { from: "Київ", to: "Одеса", price: "600 ₴" },
+            { from: "Львів", to: "Варшава", price: "1200 ₴" },
+            { from: "Дніпро", to: "Київ", price: "450 ₴" }
+        ];
 
-const cardsContainer = document.getElementById('cards-container');
-if (cardsContainer) {
-    cardsContainer.innerHTML = popularDestinations.map(dest => `
+    const cardsContainer = document.getElementById('cards-container');
+    if (!cardsContainer) return;
+
+    if (popularSources.length === 0) {
+        cardsContainer.innerHTML = '<p style="padding: 30px; text-align: center; background: #ffffff; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">Популярних маршрутів поки що немає.</p>';
+        return;
+    }
+
+    cardsContainer.innerHTML = popularSources.map(dest => `
         <div class="card">
             <div class="card-content">
                 <div class="card-text">
@@ -21,6 +30,8 @@ if (cardsContainer) {
         </div>
     `).join('');
 }
+
+renderPopularCards();
 
 // Навігація
 function updateNavigation() {

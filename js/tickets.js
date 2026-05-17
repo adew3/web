@@ -4,11 +4,22 @@ function getTicketById(ticketId) {
 }
 
 const queryState = {
-    search: '',
+    from: '',
+    to: '',
     date: '',
     sort: 'price-asc',
     type: 'all'
 };
+
+const transportLabels = {
+    bus: 'Автобус',
+    train: 'Поїзд',
+    plane: 'Авіа'
+};
+
+function getTransportLabel(type) {
+    return transportLabels[type] || type;
+}
 
 window.handleBooking = function(ticketId, buttonElement) {
     const session = TicketGo.getSession();
@@ -42,31 +53,55 @@ window.handleBooking = function(ticketId, buttonElement) {
     buttonElement.disabled = true;
 };
 
+window.handleTicketDetails = function(ticketId) {
+    const ticket = getTicketById(ticketId);
+    if (!ticket) {
+        return alert('Цей маршрут більше недоступний.');
+    }
+
+    alert(
+        `Маршрут: ${ticket.from} — ${ticket.to}\n` +
+        `Дата: ${ticket.date}\n` +
+        `Час відправлення: ${ticket.time}\n` +
+        `Транспорт: ${getTransportLabel(ticket.transport)}\n` +
+        `Ціна: ${ticket.price} ₴`
+    );
+};
+
 function renderTickets(tickets) {
     const container = document.getElementById('ticket-container');
     if (!container) return;
+    setListState(container, LIST_STATES.loading, 'Шукаємо квитки...');
     container.innerHTML = '';
 
     if (tickets.length === 0) {
-        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 50px;">
-            <h3>Квитків не знайдено 🔍</h3>
-            <p><a href="#" onclick="resetFilters()">Показати всі квитки</a></p>
-        </div>`;
+        setListState(container, LIST_STATES.empty, 'Квитків не знайдено. Спробуйте змінити фільтри.');
         return;
     }
 
+    setListState(container, LIST_STATES.ready);
     tickets.forEach(ticket => {
         const card = document.createElement('div');
         card.className = 'ticket-card';
         card.innerHTML = `
             <div class="ticket-info">
-                <h3>${ticket.from} → ${ticket.to}</h3>
-                <p>Дата: ${ticket.date}</p>
-                <p>Час: ${ticket.time} | ${ticket.transport}</p>
+                <div class="ticket-route">
+                    <span>${ticket.from}</span>
+                    <span class="ticket-arrow">→</span>
+                    <span>${ticket.to}</span>
+                </div>
+                <div class="ticket-meta">
+                    <span>${ticket.date}</span>
+                    <span>${ticket.time}</span>
+                    <span class="ticket-transport">${getTransportLabel(ticket.transport)}</span>
+                </div>
             </div>
             <div class="ticket-price">
                 <h2>${ticket.price} ₴</h2>
-                <button class="book-btn" onclick="handleBooking(${ticket.id}, this)">Забронювати</button>
+                <div class="ticket-actions">
+                    <button class="details-btn" onclick="handleTicketDetails(${ticket.id})">Детальніше</button>
+                    <button class="book-btn" onclick="handleBooking(${ticket.id}, this)">Забронювати</button>
+                </div>
             </div>
         `;
         container.appendChild(card);
@@ -76,9 +111,14 @@ function renderTickets(tickets) {
 function applyFilters() {
     let result = TicketGo.getAvailableRoutes();
 
-    if (queryState.search) {
-        const s = queryState.search.toLowerCase();
-        result = result.filter(t => t.from.toLowerCase().includes(s) || t.to.toLowerCase().includes(s));
+    if (queryState.from) {
+        const from = queryState.from.toLowerCase();
+        result = result.filter(t => t.from.toLowerCase().includes(from));
+    }
+
+    if (queryState.to) {
+        const to = queryState.to.toLowerCase();
+        result = result.filter(t => t.to.toLowerCase().includes(to));
     }
 
     if (queryState.date) {
@@ -100,27 +140,46 @@ function applyFilters() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('search-input');
+    const fromInput = document.getElementById('from-filter');
+    const toInput = document.getElementById('to-filter');
     const dateInput = document.getElementById('date-filter');
     const typeFilter = document.getElementById('type-filter');
     const sortSelect = document.getElementById('sort-select');
 
     const pSearch = localStorage.getItem('pendingSearch');
+    const pFrom = localStorage.getItem('pendingFrom');
+    const pTo = localStorage.getItem('pendingTo');
     const pDate = localStorage.getItem('pendingDate');
+    const pTransport = localStorage.getItem('pendingTransport');
 
-    if (pSearch) {
-        queryState.search = pSearch;
-        if (searchInput) searchInput.value = pSearch;
+    if (pFrom || pSearch) {
+        queryState.from = pFrom || pSearch;
+        if (fromInput) fromInput.value = queryState.from;
+        localStorage.removeItem('pendingFrom');
         localStorage.removeItem('pendingSearch');
+    }
+    if (pTo) {
+        queryState.to = pTo;
+        if (toInput) toInput.value = pTo;
+        localStorage.removeItem('pendingTo');
     }
     if (pDate) {
         queryState.date = pDate;
         if (dateInput) dateInput.value = pDate;
         localStorage.removeItem('pendingDate');
     }
+    if (pTransport) {
+        queryState.type = pTransport;
+        if (typeFilter) typeFilter.value = pTransport;
+        localStorage.removeItem('pendingTransport');
+    }
 
-    searchInput?.addEventListener('input', e => {
-        queryState.search = e.target.value;
+    fromInput?.addEventListener('input', e => {
+        queryState.from = e.target.value;
+        applyFilters();
+    });
+    toInput?.addEventListener('input', e => {
+        queryState.to = e.target.value;
         applyFilters();
     });
     dateInput?.addEventListener('change', e => {
@@ -140,11 +199,15 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 window.resetFilters = () => {
-    queryState.search = '';
+    queryState.from = '';
+    queryState.to = '';
     queryState.date = '';
     queryState.type = 'all';
-    if (document.getElementById('search-input')) document.getElementById('search-input').value = '';
+    queryState.sort = 'price-asc';
+    if (document.getElementById('from-filter')) document.getElementById('from-filter').value = '';
+    if (document.getElementById('to-filter')) document.getElementById('to-filter').value = '';
     if (document.getElementById('date-filter')) document.getElementById('date-filter').value = '';
     if (document.getElementById('type-filter')) document.getElementById('type-filter').value = 'all';
+    if (document.getElementById('sort-select')) document.getElementById('sort-select').value = 'price-asc';
     applyFilters();
 };

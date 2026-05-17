@@ -15,33 +15,47 @@
 <section class="tickets-page">
     <h1>Доступні квитки</h1>
 
-    <div class="controls-panel" style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap;">
-        <!-- Пошук містом -->
-        <input type="text" id="search-input" placeholder="Пошук за містом..." style="padding: 10px; flex: 1;">
-        
-        <!-- НОВЕ: Фільтр за датою -->
-        <input type="date" id="date-filter" style="padding: 10px;">
+    <div class="ticket-search-panel">
+        <div class="ticket-filter">
+            <label for="from-filter">Звідки</label>
+            <input type="text" id="from-filter" placeholder="Київ">
+        </div>
 
-        <!-- Фільтр за типом -->
-        <select id="type-filter" style="padding: 10px;">
-            <option value="all">Всі типи</option>
-            <option value="bus">Автобус</option>
-            <option value="train">Потяг</option>
-            <option value="plane">Літак</option>
-        </select>
+        <div class="ticket-filter">
+            <label for="to-filter">Куди</label>
+            <input type="text" id="to-filter" placeholder="Львів">
+        </div>
 
-        <!-- Сортування -->
-        <select id="sort-select" style="padding: 10px;">
-            <option value="price-asc">Ціна: від дешевих</option>
-            <option value="price-desc">Ціна: від дорогих</option>
-            <option value="date-asc">Спочатку найближчі</option>
-        </select>
+        <div class="ticket-filter">
+            <label for="date-filter">Дата</label>
+            <input type="date" id="date-filter">
+        </div>
+
+        <div class="ticket-filter">
+            <label for="type-filter">Транспорт</label>
+            <select id="type-filter">
+                <option value="all">Всі типи</option>
+                <option value="bus">Автобус</option>
+                <option value="train">Поїзд</option>
+                <option value="plane">Авіа</option>
+            </select>
+        </div>
+
+        <div class="ticket-filter">
+            <label for="sort-select">Сортування</label>
+            <select id="sort-select">
+                <option value="price-asc">Ціна: від дешевих</option>
+                <option value="price-desc">Ціна: від дорогих</option>
+                <option value="date-asc">Спочатку найближчі</option>
+            </select>
+        </div>
     </div>
 
     <div class="ticket-list" id="ticket-container"></div>
 </section>
 
 <script src="js/common.js"></script>
+<script src="js/validation.js"></script>
 <script src="js/script.js"></script>
 <script src="js/tickets.js"></script> 
 </body>

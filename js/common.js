@@ -4,7 +4,8 @@ window.TicketGo = {
         users: 'users',
         availableRoutes: 'availableRoutes',
         popularDestinations: 'popularDestinations',
-        bookings: 'bookings'
+        bookings: 'bookings',
+        contactRequests: 'contactRequests'
     },
 
     ADMIN_EMAIL: 'admin@ticketgo.com',
@@ -30,13 +31,26 @@ window.TicketGo = {
     },
 
     initTestUsers() {
-        const existingUsers = this.getUsers();
-        if (existingUsers.length === 0) {
-            this.saveUsers([
-                { username: 'Адміністратор', email: this.ADMIN_EMAIL, password: '123456', role: 'admin' },
-                { username: 'Тестовий користувач', email: 'user@gmail.com', password: '123456', role: 'user' }
-            ]);
-        }
+        const defaultUsers = [
+            { username: 'Адміністратор', email: this.ADMIN_EMAIL, password: '123456', role: 'admin' },
+            { username: 'Тестовий користувач', email: 'user@gmail.com', password: '123456', role: 'user' }
+        ];
+        const users = this.getUsers();
+
+        defaultUsers.forEach(defaultUser => {
+            const userIndex = users.findIndex(user => user.email?.toLowerCase() === defaultUser.email.toLowerCase());
+
+            if (userIndex === -1) {
+                users.push(defaultUser);
+                return;
+            }
+
+            if (defaultUser.email === this.ADMIN_EMAIL) {
+                users[userIndex] = { ...users[userIndex], ...defaultUser };
+            }
+        });
+
+        this.saveUsers(users);
     },
 
     getAvailableRoutes() {
@@ -85,6 +99,28 @@ window.TicketGo = {
         localStorage.setItem(this.storageKeys.bookings, JSON.stringify(bookings));
     },
 
+    getContactRequests() {
+        return JSON.parse(localStorage.getItem(this.storageKeys.contactRequests) || '[]');
+    },
+
+    saveContactRequest(payload) {
+        const requests = this.getContactRequests();
+        const request = {
+            id: Date.now(),
+            status: 'new',
+            createdAt: new Date().toISOString(),
+            ...payload
+        };
+
+        requests.unshift(request);
+        localStorage.setItem(this.storageKeys.contactRequests, JSON.stringify(requests));
+        return request;
+    },
+
+    saveContactRequests(requests) {
+        localStorage.setItem(this.storageKeys.contactRequests, JSON.stringify(requests));
+    },
+
     updateNavigation() {
         const session = this.getSession();
         const nav = document.querySelector('nav') || document.getElementById('main-nav');
@@ -95,6 +131,7 @@ window.TicketGo = {
             nav.innerHTML = `
                 <a href="index.html">Головна</a>
                 <a href="tickets.html">Квитки</a>
+                <a href="contacts.html">Контакти</a>
                 <a href="bookings.html">Мої бронювання</a>
                 ${adminButton}
                 <span style="margin-left: 15px; color: #3b82f6; font-weight: 600;">Привіт, ${session.username}!</span>
@@ -109,6 +146,7 @@ window.TicketGo = {
             nav.innerHTML = `
                 <a href="index.html">Головна</a>
                 <a href="tickets.html">Квитки</a>
+                <a href="contacts.html">Контакти</a>
                 <a href="auth.html">Увійти / Реєстрація</a>
             `;
         }

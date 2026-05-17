@@ -10,18 +10,21 @@
     <div class="auth-container">
     <section id="signup-section">
         <h2>Створити акаунт</h2>
-        <form id="signup-form">
+        <form id="signup-form" novalidate>
             <div class="auth-form-group">
                 <label for="reg-name">Повне ім'я</label>
                 <input type="text" id="reg-name" name="username" class="auth-input" placeholder="Іван Іванов" required>
+                <small class="field-error" data-error-for="username" hidden></small>
             </div>
             <div class="auth-form-group">
                 <label for="reg-email">Електронна пошта</label>
                 <input type="email" id="reg-email" name="email" class="auth-input" placeholder="example@mail.com" required>
+                <small class="field-error" data-error-for="email" hidden></small>
             </div>
             <div class="auth-form-group">
                 <label for="reg-password">Пароль</label>
                 <input type="password" id="reg-password" name="password" class="auth-input" placeholder="Мінімум 6 символів" required>
+                <small class="field-error" data-error-for="password" hidden></small>
             </div>
             <button type="submit" class="auth-btn">Зареєструватися</button>
         </form>
@@ -30,14 +33,16 @@
 
     <section id="signin-section" style="display: none;">
         <h2>Вхід у систему</h2>
-        <form id="signin-form">
+        <form id="signin-form" novalidate>
             <div class="auth-form-group">
                 <label for="login-email">Електронна пошта</label>
                 <input type="email" id="login-email" name="email" class="auth-input" placeholder="example@mail.com" required>
+                <small class="field-error" data-error-for="email" hidden></small>
             </div>
             <div class="auth-form-group">
                 <label for="login-password">Пароль</label>
                 <input type="password" id="login-password" name="password" class="auth-input" placeholder="Ваш пароль" required>
+                <small class="field-error" data-error-for="password" hidden></small>
             </div>
             <button type="submit" class="auth-btn">Увійти</button>
         </form>
@@ -51,6 +56,7 @@
 </div>
 
     <script src="js/common.js"></script>
+    <script src="js/validation.js"></script>
     <script src="js/auth.js"></script>
 </body>
 </html>

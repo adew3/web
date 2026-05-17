@@ -11,12 +11,14 @@ function renderPopularCards() {
 
     const cardsContainer = document.getElementById('cards-container');
     if (!cardsContainer) return;
+    setListState(cardsContainer, LIST_STATES.loading, 'Завантажуємо напрямки...');
 
     if (popularSources.length === 0) {
-        cardsContainer.innerHTML = '<p style="padding: 30px; text-align: center; background: #ffffff; border-radius: 16px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">Популярних маршрутів поки що немає.</p>';
+        setListState(cardsContainer, LIST_STATES.empty, 'Популярних маршрутів поки що немає.');
         return;
     }
 
+    setListState(cardsContainer, LIST_STATES.ready);
     cardsContainer.innerHTML = popularSources.map(dest => `
         <div class="card">
             <div class="card-content">
@@ -44,6 +46,7 @@ function updateNavigation() {
         nav.innerHTML = `
             <a href="index.html">Головна</a>
             <a href="tickets.html">Квитки</a>
+            <a href="contacts.html">Контакти</a>
             <a href="bookings.html">Мої бронювання</a>
             ${adminButton}
             <span style="margin-left: 15px; color: #3b82f6;">Привіт, ${session.username}!</span>
@@ -57,6 +60,7 @@ function updateNavigation() {
         nav.innerHTML = `
             <a href="index.html">Головна</a>
             <a href="tickets.html">Квитки</a>
+            <a href="contacts.html">Контакти</a>
             <a href="auth.html">Увійти / Реєстрація</a>
         `;
     }
@@ -65,6 +69,7 @@ function updateNavigation() {
 // Пошук на головній
 document.getElementById('home-search-btn')?.addEventListener('click', (e) => {
     e.preventDefault();
+    const form = document.getElementById('home-search');
     const fromEl = document.getElementById('home-from');
     const toEl = document.getElementById('home-to');
     const dateEl = document.getElementById('home-date');
@@ -75,10 +80,13 @@ document.getElementById('home-search-btn')?.addEventListener('click', (e) => {
         const transportRadio = document.querySelector('input[name="home-transport"]:checked');
         const transportVal = transportRadio?.value || 'bus';
 
-    if (!fromVal || !toVal) {
-        alert('Будь ласка, вкажіть звідки та куди.');
+    const validation = validateHomeSearch({ from: fromVal, to: toVal });
+    if (!validation.isValid) {
+        showErrors(form, validation.errors);
         return;
     }
+
+    clearErrors(form);
 
     localStorage.setItem('pendingFrom', fromVal);
     localStorage.setItem('pendingTo', toVal);

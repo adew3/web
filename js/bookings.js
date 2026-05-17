@@ -1,9 +1,10 @@
 document.addEventListener('DOMContentLoaded', () => {
     const session = JSON.parse(localStorage.getItem('session'));
     const container = document.getElementById('my-bookings-container');
+    setListState(container, LIST_STATES.loading, 'Завантажуємо бронювання...');
 
     if (!session) {
-        container.innerHTML = '<p style="text-align:center;">Увійдіть, щоб переглянути бронювання.</p>';
+        setListState(container, LIST_STATES.empty, 'Увійдіть, щоб переглянути бронювання.');
         return;
     }
 
@@ -12,8 +13,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const myBookings = allBookings.filter(b => b.userEmail === session.email);
 
     if (myBookings.length === 0) {
-        container.innerHTML = '<p style="text-align:center;">У вас поки немає заброньованих квитків.</p>';
+        setListState(container, LIST_STATES.empty, 'У вас поки немає заброньованих квитків.');
     } else {
+        setListState(container, LIST_STATES.ready);
+        container.innerHTML = '';
         myBookings.forEach(ticket => {
             const card = document.createElement('div');
             card.className = 'ticket-card';

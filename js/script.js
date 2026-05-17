@@ -63,14 +63,27 @@ function updateNavigation() {
 }
 
 // Пошук на головній
-document.getElementById('home-search-btn')?.addEventListener('click', () => {
-    const fromVal = document.getElementById('home-from')?.value.trim();
-    const toVal = document.getElementById('home-to')?.value.trim();
-    const dateInputs = document.querySelectorAll('.search-box input[type="date"]');
-    const dateVal = dateInputs.length > 0 ? dateInputs[0].value : null;
+document.getElementById('home-search-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const fromEl = document.getElementById('home-from');
+    const toEl = document.getElementById('home-to');
+    const dateEl = document.getElementById('home-date');
 
-    if (toVal || fromVal) localStorage.setItem('pendingSearch', toVal || fromVal);
+    const fromVal = fromEl?.value.trim();
+    const toVal = toEl?.value.trim();
+    const dateVal = dateEl?.value || '';
+        const transportRadio = document.querySelector('input[name="home-transport"]:checked');
+        const transportVal = transportRadio?.value || 'bus';
+
+    if (!fromVal || !toVal) {
+        alert('Будь ласка, вкажіть звідки та куди.');
+        return;
+    }
+
+    localStorage.setItem('pendingFrom', fromVal);
+    localStorage.setItem('pendingTo', toVal);
     if (dateVal) localStorage.setItem('pendingDate', dateVal);
+    localStorage.setItem('pendingTransport', transportVal);
 
     window.location.href = 'tickets.html';
 });

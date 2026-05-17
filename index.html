@@ -21,14 +21,77 @@
 
 <section class="search">
     <h1>Зручно бронюйте квитки онлайн</h1>
-    <div class="search-box">
-        <!-- Додали ID для полів -->
-        <input type="text" id="home-from" placeholder="Звідки">
-        <input type="text" id="home-to" placeholder="Куди">
-        <input type="date">
-        <!-- Додали ID для кнопки -->
-        <button id="home-search-btn">Знайти квитки</button>
-    </div>
+    <form class="search-box" id="home-search" action="tickets.html" onsubmit="return false;">
+        <div class="search-field">
+            <span class="search-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 21l-4.35-4.35" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16z" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <label class="visually-hidden" for="home-from">Звідки</label>
+            <input type="text" id="home-from" placeholder="Звідки" aria-label="Звідки">
+        </div>
+
+        <div class="search-field">
+            <span class="search-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2v6" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 22v-6" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M5 7l7 5 7-5" stroke="#10B981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+            <label class="visually-hidden" for="home-to">Куди</label>
+            <input type="text" id="home-to" placeholder="Куди" aria-label="Куди">
+        </div>
+
+        <div class="search-field">
+            <span class="search-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="3" y="4" width="18" height="16" rx="2" stroke="#F59E0B" stroke-width="2"/>
+                    <path d="M16 2v4M8 2v4" stroke="#F59E0B" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+            </span>
+            <label class="visually-hidden" for="home-date">Дата</label>
+            <input type="date" id="home-date" aria-label="Дата">
+        </div>
+
+        <div class="search-field transport-field">
+            <div class="transport-toggle" role="tablist" aria-label="Тип транспорту">
+                <input type="radio" id="t-bus" name="home-transport" value="bus" checked>
+                <label for="t-bus" class="transport-option" aria-label="Автобус">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="6" width="20" height="10" rx="2" stroke="#0ea5a4" stroke-width="1.5"/>
+                        <circle cx="7" cy="18" r="1" fill="#0ea5a4"/>
+                        <circle cx="17" cy="18" r="1" fill="#0ea5a4"/>
+                    </svg>
+                    <span>Автобус</span>
+                </label>
+
+                <input type="radio" id="t-train" name="home-transport" value="train">
+                <label for="t-train" class="transport-option" aria-label="Поїзд">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="3" y="5" width="18" height="11" rx="2" stroke="#f97316" stroke-width="1.5"/>
+                        <path d="M7 16v2M17 16v2" stroke="#f97316" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <span>Поїзд</span>
+                </label>
+
+                <input type="radio" id="t-plane" name="home-transport" value="plane">
+                <label for="t-plane" class="transport-option" aria-label="Авіа">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 12h6l3-3 3 3h8" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8 12v6l4-2 4 2v-6" stroke="#2563eb" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Авіа</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="search-action">
+            <button id="home-search-btn" class="primary">Знайти квитки</button>
+        </div>
+    </form>
 </section>
 
 <section class="popular">
@@ -36,12 +99,66 @@
     <div class="cards" id="cards-container"></div>
 </section>
 
+<section class="features">
+    <div class="section-head">
+        <h2>Переваги сервісу</h2>
+        <p>Все для швидкого та надійного бронювання квитків онлайн.</p>
+    </div>
+    <div class="feature-grid">
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Швидке бронювання</h3>
+            <p>Оформлення квитка за 60 секунд без зайвих кроків.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🎟️</div>
+            <h3>Гарантія місць</h3>
+            <p>Ми підтверджуємо ваше бронювання до посадкового місця.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🕒</div>
+            <h3>Підтримка 24/7</h3>
+            <p>Консультації та допомога у будь-який час доби.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔄</div>
+            <h3>Безкоштовна відміна</h3>
+            <p>Скасуйте бронювання без комісії до X годин.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h3>Безпечна оплата</h3>
+            <p>Платежі захищені та обробляються надійно.</p>
+        </div>
+    </div>
+</section>
+
 <section class="steps">
-    <h2>Як працює TicketGo</h2>
-    <div class="step-list">
-        <div>1. Оберіть маршрут</div>
-        <div>2. Забронюйте</div>
-        <div>3. Отримайте квиток</div>
+    <div class="section-head">
+        <h2>Як це працює</h2>
+        <p>Простий процес бронювання квитків за кілька кліків — від вибору маршруту до отримання посадкового місця.</p>
+    </div>
+    <div class="step-grid">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Оберіть маршрут</h3>
+            <p>Знайдіть свій напрямок та перевірте розклад для зручних дат.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Виберіть місце</h3>
+            <p>Оцініть варіанти та місця, які підходять саме вам.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Оплатіть онлайн</h3>
+            <p>Надійна та швидка оплата карткою або іншими способами.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">4</div>
+            <h3>Отримайте квиток</h3>
+            <p>Моментальне підтвердження та електронний квиток на пошту.</p>
+        </div>
     </div>
 </section>
 
